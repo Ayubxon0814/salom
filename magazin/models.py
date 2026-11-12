@@ -1,6 +1,5 @@
+from django.core.validators import MinValueValidator
 from django.db import models
-from django.forms import CharField
-
 
 class TimeStampedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -9,19 +8,27 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 class Oluvchi(TimeStampedModel):
-    yosh = models.PositiveIntegerField(null=True, blank=True)
-    Char = models.CharField(null=True, blank=True)
-    Text = models.TextField(null=True, blank=True)
-    Email = models.EmailField(null=True, blank=True)
-    URL = models.URLField(null=True, blank=True)
-    yosh6 = models.IntegerField(null=True, blank=True)
-    yosh7 = models.FloatField(null=True, blank=True)
-    yosh8 = models.DecimalField(null=True, blank=True)
-    yosh9 = models.DateField(null=True, blank=True)
-    yosh10 = models.TimeField(null=True, blank=True)
-    yosh11 = models.DateTimeField(null=True, blank=True)
-    yosh12 = models.DurationField(null=True, blank=True)
-    yosh13 = models.BooleanField(null=True, blank=True)
-    yosh14 = models.FileField(null=True, blank=True)
+    ism = models.CharField(max_length=50)
+    yosh = models.PositiveIntegerField(default=18)
+    def __str__(self):
+        return self.ism
 
+class Sotuvchi(TimeStampedModel):
+    ism = models.CharField(max_length=50)
+    familya = models.CharField(max_length=50)
+    email = models.EmailField()
+    yosh = models.PositiveIntegerField(validators=[MinValueValidator(16)])
+    def __str__(self):
+        return f"{self.ism} - {self.email}"
 
+class Mahsulot(TimeStampedModel):
+    nom = models.CharField(max_length=50)
+    narh = models.DecimalField(max_digits=8, decimal_places=2)
+    ranglar = (
+        ("oq", "oq"),
+        ("qizil", "qizil"),
+        ("sariq", "sariq"),
+    )
+    rang = models.CharField(max_length=50, choices=ranglar, default="oq")
+    oluvchi = models.ForeignKey(Oluvchi, on_delete=models.CASCADE)
+    sotuvchi = models.ForeignKey(Sotuvchi, on_delete=models.CASCADE)
