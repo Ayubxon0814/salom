@@ -10,6 +10,7 @@ class TimeStampedModel(models.Model):
 class Oluvchi(TimeStampedModel):
     ism = models.CharField(max_length=50)
     yosh = models.PositiveIntegerField(default=18)
+    email = models.EmailField()
     def __str__(self):
         return self.ism
 
